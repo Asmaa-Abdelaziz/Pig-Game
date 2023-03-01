@@ -26,7 +26,7 @@ const init = function () {
   scores = [0, 0];
   currentScore = 0;
   activePlayer = 0;
-  //   gamePlaying = true;
+  gamePlaying = true;
 
   score0El.textContent = 0;
   score1El.textContent = 0;
@@ -40,6 +40,9 @@ const init = function () {
   player1El.classList.remove('player--winner');
   player0El.classList.add('player--active');
   player1El.classList.remove('player--active');
+
+  document.querySelector(`#name--0`).textContent = `PLAYER 1`;
+  document.querySelector(`#name--1`).textContent = `PLAYER 2`;
 };
 init();
 
@@ -56,60 +59,60 @@ const switchPlayer = function () {
 
 // Rolling dice functionality
 btnRoll.addEventListener('click', function () {
-  //   if (gamePlaying) {
-  // 1. Generating random dice roll
-  const dice = Math.trunc(Math.random() * 6) + 1;
-  // console.log(dice);
+  if (gamePlaying) {
+    // 1. Generating random dice roll
+    const dice = Math.trunc(Math.random() * 6) + 1;
+    // console.log(dice);
 
-  // 2. display the dice
-  // Remove hidden class from dice element then display the number on the dice
-  diceEl.classList.remove('hidden');
-  diceEl.src = `dice-${dice}.png`;
+    // 2. display the dice
+    // Remove hidden class from dice element then display the number on the dice
+    diceEl.classList.remove('hidden');
+    diceEl.src = `dice-${dice}.png`;
 
-  // 3. check for rolled if 1 -> switch to next player and make current = 0
-  if (dice !== 1) {
-    // Add dice to current score
-    currentScore += dice;
-    document.getElementById(`current--${activePlayer}`).textContent =
-      currentScore;
-  } else {
-    switchPlayer();
+    // 3. check for rolled if 1 -> switch to next player and make current = 0
+    if (dice !== 1) {
+      // Add dice to current score
+      currentScore += dice;
+      document.getElementById(`current--${activePlayer}`).textContent =
+        currentScore;
+    } else {
+      switchPlayer();
+    }
+    //   }
   }
-  //   }
 });
 
 btnHold.addEventListener('click', function () {
-  //   if (gamePlaying) {
-  // 1. Add current score to active player's score
-  scores[activePlayer] += currentScore;
-  document.querySelector(`#score--${activePlayer}`).textContent =
-    scores[activePlayer];
-  // 2. Check if player's score is >= 100
-  if (scores[activePlayer] >= 100) {
-    // if Yes -> Finish the game
-    gamePlaying = false;
-    diceEl.classList.add('hidden');
-    document
-      .querySelector(`.player--${activePlayer}`)
-      .classList.add('player--winner');
-    document
-      .querySelector(`.player--${activePlayer}`)
-      .classList.remove('player--active');
-    document.querySelector(`#current--${activePlayer}`).textContent = 0;
+  if (gamePlaying) {
+    // 1. Add current score to active player's score
+    scores[activePlayer] += currentScore;
+    document.querySelector(`#score--${activePlayer}`).textContent =
+      scores[activePlayer];
+    // 2. Check if player's score is >= 100
+    if (scores[activePlayer] >= 100) {
+      // if Yes -> Finish the game
+      gamePlaying = false;
+      diceEl.classList.add('hidden');
+      document
+        .querySelector(`.player--${activePlayer}`)
+        .classList.add('player--winner');
+      document
+        .querySelector(`.player--${activePlayer}`)
+        .classList.remove('player--active');
+      document.querySelector(`#current--${activePlayer}`).textContent = 0;
 
-    btnRoll.classList.add('hidden');
-    btnHold.classList.add('hidden');
-    document.querySelector(`#name--${activePlayer}`).textContent = `PLAYER ${
-      activePlayer + 1
-    } wins`;
-  } else {
-    // if No -> Switch to the next player
-    switchPlayer();
+      btnRoll.classList.add('hidden');
+      btnHold.classList.add('hidden');
+      document.querySelector(`#name--${activePlayer}`).textContent = `PLAYER ${
+        activePlayer + 1
+      } wins`;
+    } else {
+      // if No -> Switch to the next player
+      switchPlayer();
+    }
+    //   }
   }
-  //   }
 });
 
 btnNew.addEventListener('click', init);
 
-// NOTES
-// If one of players wins, I hide the ROLL DICE & the HOLD buttons so i comment the condition if game is playing or not.
